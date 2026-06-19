@@ -1,0 +1,85 @@
+---
+import Container from '@/components/ui/Container.astro';
+import SectionTitle from '@/components/ui/SectionTitle.astro';
+
+export interface ProcessStep {
+  number: number;
+  title: string;
+  description: string;
+}
+
+interface Props {
+  title?: string;
+  subtitle?: string;
+  steps: ProcessStep[];
+}
+
+const {
+  title    = 'Cómo trabajamos',
+  subtitle = 'Un proceso claro de principio a fin.',
+  steps,
+} = Astro.props;
+---
+
+<section class="section section--white process">
+  <Container>
+    <SectionTitle {title} {subtitle} />
+
+    <ol class="process__list">
+      {steps.map(step => (
+        <li class="process-step">
+          <div class="process-step__number" aria-hidden="true">{step.number}</div>
+          <div class="process-step__content">
+            <h3 class="process-step__title">{step.title}</h3>
+            <p class="process-step__desc">{step.description}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </Container>
+</section>
+
+<style>
+  .process__list {
+    display: grid;
+    gap: var(--space-6);
+    counter-reset: step;
+    max-width: 720px;
+    margin-inline: auto;
+  }
+
+  .process-step {
+    display: grid;
+    grid-template-columns: 3rem 1fr;
+    gap: var(--space-5);
+    align-items: start;
+    padding: var(--space-6);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+  }
+
+  .process-step__number {
+    width: 3rem;
+    height: 3rem;
+    background: var(--color-primary);
+    color: #fff;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: var(--font-weight-bold);
+    font-size: var(--text-lg);
+    flex-shrink: 0;
+  }
+
+  .process-step__title {
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-2);
+  }
+
+  .process-step__desc {
+    color: var(--color-neutral-light);
+    line-height: var(--line-height-loose);
+  }
+</style>

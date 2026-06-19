@@ -3,18 +3,21 @@
 Plantilla base profesional para crear webs corporativas de clientes.  
 Stack: **Astro 4 · CSS puro · TypeScript · DDEV**
 
+**Repositorio:** [github.com/antonioprietoj/astro-web-template](https://github.com/antonioprietoj/astro-web-template)
+
 ---
 
 ## Inicio rápido
 
 ### Requisitos
-- [DDEV](https://ddev.readthedocs.io/) instalado
+- [DDEV](https://ddev.readthedocs.io/) v1.25+ instalado
 - Node.js 20+ (gestionado por DDEV)
 
 ### Instalación
 
 ```bash
-ddev config   # si es la primera vez en este directorio
+git clone https://github.com/antonioprietoj/astro-web-template.git mi-cliente
+cd mi-cliente
 ddev start
 ddev npm install
 ```
@@ -25,10 +28,10 @@ ddev npm install
 ddev npm run dev
 ```
 
-Abre `https://astro-web-template.ddev.site:4322` (HTTPS) o `http://astro-web-template.ddev.site:4321`.
+Abre **`https://<nombre-proyecto>.ddev.site`** (ej. `https://astro-web-template.ddev.site`).
 
-> El puerto HTTPS puede variar según tu configuración DDEV.  
-> También puedes acceder directamente desde el contenedor en `http://localhost:4321`.
+> DDEV hace proxy nginx → Astro dev server (puerto 4321).  
+> Deja `ddev npm run dev` corriendo mientras desarrollas.
 
 ### Build estático
 
@@ -85,12 +88,12 @@ astro-web-template/
 ### 1. Clonar la plantilla
 
 ```bash
-git clone <url-del-repo-plantilla> web-cliente-nombre
+git clone https://github.com/antonioprietoj/astro-web-template.git web-cliente-nombre
 cd web-cliente-nombre
 
 # Desconectar del repo plantilla y crear repo nuevo
 git remote remove origin
-git remote add origin <url-nuevo-repo-cliente>
+git remote add origin git@github.com:tu-usuario/web-cliente-nombre.git
 git push -u origin main
 ```
 
@@ -111,14 +114,10 @@ Edita **`src/data/site.ts`** — es el único archivo que toca el 90% del trabaj
 
 ### 3. Actualizar la URL de producción
 
-En `astro.config.mjs`:
+En `astro.config.mjs` (robots.txt y sitemap se generan solos desde `site:`):
+
 ```js
 site: 'https://www.dominio-real-del-cliente.com',
-```
-
-En `public/robots.txt`:
-```
-Sitemap: https://www.dominio-real-del-cliente.com/sitemap-index.xml
 ```
 
 ### 4. Cambiar el favicon
@@ -144,7 +143,20 @@ Si el cliente tiene colores de marca, edita las variables en `src/styles/global.
 }
 ```
 
-### 7. Levantar y revisar
+### 7. Configurar formulario de contacto
+
+En `src/data/site.ts`, sección `form`:
+
+```ts
+form: {
+  mode: 'formspree',      // 'demo' | 'formspree' | 'endpoint'
+  formspreeId: 'tu-id',
+  customEndpoint: '',
+  subject: 'Nueva solicitud desde la web',
+},
+```
+
+### 8. Levantar y revisar
 
 ```bash
 ddev start

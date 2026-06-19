@@ -4,13 +4,18 @@ import Button from '@/components/ui/Button.astro';
 
 interface Props {
   showServices?: boolean;
-  formAction?: string;  // Netlify / Formspree / custom endpoint
 }
 
-const {
-  showServices = true,
-  formAction   = '#',
-} = Astro.props;
+const { showServices = true } = Astro.props;
+
+const { mode, formspreeId, customEndpoint } = site.form;
+
+const formAction =
+  mode === 'formspree' && formspreeId
+    ? `https://formspree.io/f/${formspreeId}`
+    : mode === 'endpoint' && customEndpoint
+      ? customEndpoint
+      : undefined;
 ---
 
 <form
@@ -20,6 +25,8 @@ const {
   novalidate
   id="contact-form"
   aria-label="Formulario de contacto"
+  data-mode={mode}
+  data-endpoint={formAction ?? ''}
 >
   <!-- Honeypot anti-spam field -->
   <input type="text" name="_honeypot" class="contact-form__honeypot" tabindex="-1" autocomplete="off" />
@@ -132,20 +139,26 @@ const {
       e.preventDefault();
       if (!validateForm()) return;
 
-      submit.disabled   = true;
+      submit.disabled    = true;
       submit.textContent = 'Enviando…';
+
+      const mode     = form.dataset.mode ?? 'demo';
+      const endpoint = form.dataset.endpoint ?? '';
 
       try {
         const data = new FormData(form);
-
-        // Remove honeypot before sending
         data.delete('_honeypot');
 
-        // Replace with your real endpoint (Netlify, Formspree, etc.)
-        // const res = await fetch(form.action, { method: 'POST', body: data });
-
-        // Demo: simulate success
-        await new Promise(r => setTimeout(r, 800));
+        if (mode === 'demo' || !endpoint) {
+          await new Promise(r => setTimeout(r, 800));
+        } else {
+          const res = await fetch(endpoint, {
+            method: 'POST',
+            body: data,
+            headers: { Accept: 'application/json' },
+          });
+          if (!res.ok) throw new Error('Request failed');
+        }
 
         showFeedback('success', '¡Mensaje enviado! Te contactaremos en breve.');
         form.reset();

@@ -60,9 +60,27 @@ export const site = {
     defaultTitle: 'Reformas García Madrid — Reformas Integrales con Garantía',
     defaultDescription:
       'Empresa de reformas integrales en Madrid. Baños, cocinas, pintura y más. +15 años de experiencia. Presupuesto gratuito.',
-    defaultImage: '/images/og-default.jpg',   // 1200×630
+    defaultImage: '/images/og-default.svg',   // Replace with 1200×630 JPG for production
     locale: 'es_ES',
     twitterHandle: '',
+  },
+
+  // ── Images ────────────────────────────────────────────────
+  images: {
+    hero: '/images/hero.svg',
+    heroAlt: 'Reformas integrales en Madrid — Reformas García',
+    og: '/images/og-default.svg',
+  },
+
+  // ── Contact form ──────────────────────────────────────────
+  // mode: 'demo' | 'formspree' | 'endpoint'
+  // formspree: set formspreeId from https://formspree.io
+  // endpoint: set customEndpoint to your API URL
+  form: {
+    mode: 'demo' as 'demo' | 'formspree' | 'endpoint',
+    formspreeId: '',
+    customEndpoint: '',
+    subject: 'Nueva solicitud desde la web',
   },
 
   // ── Visual config ─────────────────────────────────────────

@@ -6,10 +6,11 @@ import AboutPreview from '@/components/sections/AboutPreview.astro';
 import Testimonials from '@/components/sections/Testimonials.astro';
 import FAQ from '@/components/sections/FAQ.astro';
 import CTA from '@/components/sections/CTA.astro';
+import { site } from '@/data/site';
 ---
 
 <BaseLayout>
-  <Hero />
+  <Hero image={site.images.hero} imageAlt={site.images.heroAlt} />
   <Services featuredOnly showCta />
   <AboutPreview />
   <Testimonials />
