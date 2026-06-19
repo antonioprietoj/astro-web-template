@@ -14,4 +14,3 @@ web_extra_exposed_ports:
 hooks:
   post-start:
     - exec: "if [ ! -d /var/www/html/node_modules ]; then npm install; fi"
-    - exec-host: "ddev npm run dev &"
