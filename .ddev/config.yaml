@@ -11,6 +11,12 @@ web_extra_exposed_ports:
     http_port: 4321
     https_port: 4322
 
+# Astro dev server — auto-starts on ddev start/restart (supervisord)
+web_extra_daemons:
+  - name: astro-dev
+    command: npm run dev
+    directory: /var/www/html
+
 hooks:
   post-start:
     - exec: "if [ ! -d /var/www/html/node_modules ]; then npm install; fi"

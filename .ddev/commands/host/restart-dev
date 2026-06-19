@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+## Description: Restart Astro dev server (supervisord daemon)
+## Usage: restart-dev
+## Example: "ddev restart-dev"
+
+set -eu
+
+if ! ddev describe >/dev/null 2>&1; then
+  echo "DDEV not running. Starting project..."
+  ddev start
+fi
+
+ddev exec supervisorctl restart webextradaemons:astro-dev
+echo "Astro dev server restarted. Open https://$(ddev describe -j | grep -o '"name":"[^"]*"' | head -1 | cut -d'"' -f4).ddev.site"

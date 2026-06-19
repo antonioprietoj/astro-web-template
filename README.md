@@ -25,13 +25,16 @@ ddev npm install
 ### Desarrollo
 
 ```bash
-ddev npm run dev
+ddev start
 ```
 
-Abre **`https://<nombre-proyecto>.ddev.site`** (ej. `https://astro-web-template.ddev.site`).
+Abre **`https://<nombre-proyecto>.ddev.site`**. El dev server arranca automáticamente.
 
-> DDEV hace proxy nginx → Astro dev server (puerto 4321).  
-> Deja `ddev npm run dev` corriendo mientras desarrollas.
+Si tras un cambio no ves actualizaciones:
+
+```bash
+ddev restart-dev
+```
 
 ### Build estático
 

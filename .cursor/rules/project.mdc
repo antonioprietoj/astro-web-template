@@ -32,10 +32,21 @@ alwaysApply: true
 - Cada componente Astro tiene su `<style>` scoped. CSS global solo en `global.css`.
 - El diseño debe ser responsive. Breakpoints principales: 640px (sm), 768px (md), 1024px (lg).
 
+## DDEV y dev server
+
+- Astro dev corre como **daemon DDEV** (`web_extra_daemons`). Arranca solo con `ddev start`.
+- URL: `https://<proyecto>.ddev.site` — no uses localhost manualmente.
+- **Tras cambios en** `astro.config.mjs`, `.ddev/`, `package.json`, nginx o dependencias npm:
+  ejecuta `ddev restart-dev` (o `ddev restart` si falla).
+- Tras cambios en componentes/CSS/TS, HMR suele bastar; si algo no se ve, `ddev restart-dev`.
+- **El agente DEBE ejecutar `ddev restart-dev` al terminar cambios que afecten config o dependencias.**
+- Build estático: `ddev npm run build` → sube `dist/` al hosting.
+- No cambies el puerto 4321.
+
 ## Dependencias
 
 - No instales dependencias npm sin una razón clara y documentada.
-- Las únicas dependencias previstas son `astro` y `@astrojs/sitemap`.
+- Dependencias permitidas: `astro`, `@astrojs/sitemap`, `vanilla-cookieconsent`.
 - Para iconos: usa emojis unicode o SVGs inline. No instales librerías de iconos.
 
 ## SEO y rendimiento
@@ -45,12 +56,6 @@ alwaysApply: true
 - Las imágenes deben tener `alt`, `width` y `height`. Usa `loading="lazy"` salvo en el hero.
 - El favicon se actualiza en `public/favicon.svg` para cada cliente.
 - Actualiza `site` en `astro.config.mjs` con la URL de producción real antes de hacer build.
-
-## DDEV
-
-- Mantén compatibilidad con DDEV. El proyecto corre con `ddev npm run dev`.
-- No cambies el tipo de proyecto DDEV ni el puerto 4321.
-- El build estático va a `dist/`. Esa carpeta se sube al hosting.
 
 ## Accesibilidad
 
@@ -66,5 +71,5 @@ alwaysApply: true
 3. Actualiza `site` en `astro.config.mjs` con la URL real.
 4. Cambia `favicon.svg` y añade imágenes en `public/images/`.
 5. Ajusta colores en `:root` de `global.css` si el cliente tiene marca propia.
-6. `ddev start && ddev npm run dev` para previsualizar.
+6. `ddev start` para previsualizar (dev server arranca solo).
 7. `ddev npm run build` → sube `dist/` al hosting.
