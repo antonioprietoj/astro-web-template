@@ -1,7 +1,9 @@
 name: astro-web-template
-type: nodejs
-nodejs_version: "20"
+type: php
+php_version: "8.2"
+webserver_type: nginx-fpm
 docroot: dist
+nodejs_version: "20"
 
 web_extra_exposed_ports:
   - name: astro-dev
@@ -11,4 +13,4 @@ web_extra_exposed_ports:
 
 hooks:
   post-start:
-    - exec: "if [ ! -d node_modules ]; then npm install; fi"
+    - exec: "if [ ! -d /var/www/html/node_modules ]; then npm install; fi"
