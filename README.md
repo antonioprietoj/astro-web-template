@@ -156,7 +156,25 @@ form: {
 },
 ```
 
-### 8. Levantar y revisar
+### 8. Configurar cookies y analytics
+
+En `src/data/site.ts`, sección `cookies`:
+
+```ts
+cookies: {
+  enabled: true,
+  privacyPolicyUrl: '/politica-de-privacidad',
+  contactUrl: '/contacto',
+  gtmId: '',           // GTM-XXXXXXX (opcional)
+  gaMeasurementId: '', // G-XXXXXXXXXX (opcional)
+},
+```
+
+- `enabled: false` desactiva el banner
+- Enlace "Configuración de cookies" en el footer reabre preferencias
+- Adaptado de `vanilla-cookieconsent` (mismo sistema que quemevistanlobailao)
+
+### 9. Levantar y revisar
 
 ```bash
 ddev start
