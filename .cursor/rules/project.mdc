@@ -25,6 +25,48 @@ alwaysApply: true
   - `src/components/ui/` → piezas atómicas (Button, SectionTitle, Container…)
   - `src/components/forms/` → formularios
 
+## Sincronización con la plantilla padre
+
+Cuando estés trabajando en un proyecto de cliente y ocurra cualquiera de estas situaciones,
+**debes proponerlo activamente** y, si el usuario acepta, ejecutarlo:
+
+**Situaciones que requieren sincronizar con la plantilla:**
+- Se crea un componente o sección reutilizable (no específico del cliente).
+- Se añade un helper/utilidad genérico en `src/utils/`.
+- Se mejora un componente base ya existente en la plantilla (Header, Footer, Button…).
+- Se añade un nuevo preset de sector en `src/data/presets/`.
+- Se descubre un patrón de config DDEV o Astro que beneficia a todos los proyectos.
+- Cualquier cosa que el usuario indique expresamente que quiere subir a la plantilla.
+
+**Cómo sincronizar — usa `push-to-template.sh`:**
+
+```bash
+# Componente nuevo en content-library
+bash push-to-template.sh \
+  src/content-library/sections/mi-bloque/ \
+  src/content-library/sections/mi-bloque/
+
+# Utilidad genérica
+bash push-to-template.sh \
+  src/utils/format-date.ts \
+  src/utils/format-date.ts \
+  "feat(utils): add formatDate helper"
+
+# Actualización de un preset
+bash push-to-template.sh \
+  src/data/presets/index.ts \
+  src/data/presets/index.ts \
+  "feat(presets): add farmacia sector"
+```
+
+El script clona/actualiza la plantilla en `~/.cache/astro-web-template-push`, copia los ficheros,
+hace commit y push automáticamente.
+
+**Reglas para el mensaje de commit hacia la plantilla:**
+- Formato: `tipo(alcance): asunto` (convencional)
+- Tipos habituales: `feat(content-library)`, `feat(presets)`, `feat(utils)`, `fix(component)`, `docs`
+- Nunca incluyas datos del cliente en lo que se suba a la plantilla.
+
 ## Estilos y CSS
 
 - Usa siempre las variables CSS de `src/styles/global.css` (`--color-primary`, `--space-*`, etc.).
