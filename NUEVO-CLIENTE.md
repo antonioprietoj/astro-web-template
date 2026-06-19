@@ -36,6 +36,44 @@ Si necesitas crear un componente nuevo que pueda servir para futuras webs, guár
 
 ---
 
+# Prompt — Guardar componente en la biblioteca
+
+```
+Hemos creado un nuevo componente o patrón que puede servir para futuros proyectos.
+
+Quiero que lo conviertas en un recurso reutilizable dentro de la biblioteca interna del proyecto.
+
+Instrucciones:
+
+Revisa el componente o sección que acabamos de crear.
+Limpia el código si es necesario.
+Hazlo reutilizable mediante props o datos configurables.
+Guárdalo en la carpeta correcta dentro de src/content-library/.
+Si corresponde, crea una versión lista para usar en src/components/.
+Documenta el recurso con:
+
+  Nombre
+  Tipo de bloque
+  Cuándo usarlo
+  Datos o props que necesita
+  Ejemplo de uso
+  Dependencias
+  Notas de diseño
+  Fecha de creación o actualización
+
+No rompas la estructura actual del proyecto.
+No instales dependencias nuevas salvo que sea necesario.
+Mantén compatibilidad con Astro y DDEV.
+
+Ejemplo: si el componente es un nuevo acordeón, guárdalo en:
+
+  src/content-library/accordions/
+
+Y documenta cómo reutilizarlo en futuras webs.
+```
+
+---
+
 ## Checklist al crear una web nueva
 
 - [ ] Clonar el repo plantilla: `git clone <repo> <nombre-cliente> && cd <nombre-cliente>`
