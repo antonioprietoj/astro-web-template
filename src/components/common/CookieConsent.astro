@@ -1,0 +1,17 @@
+---
+import { site } from '@/data/site';
+import 'vanilla-cookieconsent/dist/cookieconsent.css';
+import '@/styles/cookie-consent.css';
+---
+
+<script is:inline define:vars={{ cookieConfig: site.cookies }}>
+  window.__COOKIE_CONFIG__ = cookieConfig;
+</script>
+<script>
+  import { initCookieConsent } from '@/scripts/cookie-consent';
+
+  const config = window.__COOKIE_CONFIG__;
+  if (config?.enabled) {
+    initCookieConsent(config);
+  }
+</script>

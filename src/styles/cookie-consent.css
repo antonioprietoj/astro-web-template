@@ -1,0 +1,66 @@
+/* Cookie consent theme — uses global CSS variables from global.css */
+
+#cc-main {
+  --cc-font-family: var(--font-sans);
+  --cc-modal-border-radius: var(--radius-lg);
+  --cc-btn-border-radius: var(--radius-md);
+
+  /* Light theme matching template */
+  --cc-bg: #ffffff;
+  --cc-overlay-bg: rgba(17, 24, 39, 0.55);
+  --cc-separator-border-color: var(--color-border);
+
+  --cc-primary-color: var(--color-neutral);
+  --cc-secondary-color: var(--color-neutral-light);
+
+  --cc-cookie-category-block-bg: var(--color-bg);
+  --cc-cookie-category-block-border: var(--color-border);
+  --cc-cookie-category-block-hover-bg: var(--color-primary-light);
+  --cc-cookie-category-block-hover-border: var(--color-border);
+  --cc-cookie-category-expanded-block-bg: var(--color-bg);
+  --cc-cookie-category-expanded-block-hover-bg: var(--color-primary-light);
+  --cc-section-category-border: var(--color-border);
+  --cc-footer-bg: var(--color-bg);
+  --cc-footer-color: var(--color-neutral-light);
+  --cc-footer-border-color: var(--color-border);
+
+  /* Primary button — brand color */
+  --cc-btn-primary-bg: var(--color-primary);
+  --cc-btn-primary-color: #ffffff;
+  --cc-btn-primary-border-color: var(--color-primary);
+  --cc-btn-primary-hover-bg: var(--color-primary-dark);
+  --cc-btn-primary-hover-color: #ffffff;
+  --cc-btn-primary-hover-border-color: var(--color-primary-dark);
+
+  /* Secondary button */
+  --cc-btn-secondary-bg: var(--color-surface);
+  --cc-btn-secondary-color: var(--color-neutral);
+  --cc-btn-secondary-border-color: var(--color-border);
+  --cc-btn-secondary-hover-bg: var(--color-bg);
+  --cc-btn-secondary-hover-color: var(--color-neutral);
+  --cc-btn-secondary-hover-border-color: var(--color-neutral-light);
+
+  /* Toggles */
+  --cc-toggle-on-bg: var(--color-primary);
+  --cc-toggle-off-bg: #9ca3af;
+  --cc-toggle-readonly-bg: #d1d5db;
+  --cc-toggle-on-knob-bg: #ffffff;
+  --cc-toggle-off-knob-bg: #ffffff;
+  --cc-toggle-readonly-knob-bg: #f3f4f6;
+
+  --cc-link-color: var(--color-primary);
+}
+
+#cc-main .cm__desc a,
+#cc-main .pm__section-desc a {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+#cc-main .pm__section--expandable .pm__section-desc-wrapper,
+#cc-main .pm__section-desc-wrapper > :not(:last-child),
+#cc-main .pm__section--expandable .pm__section-title,
+#cc-main .pm__section--toggle,
+#cc-main .pm__section {
+  border-color: var(--color-border) !important;
+}

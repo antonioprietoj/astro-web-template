@@ -83,6 +83,16 @@ export const site = {
     subject: 'Nueva solicitud desde la web',
   },
 
+  // ── Cookies & analytics ───────────────────────────────────
+  cookies: {
+    enabled: true,
+    privacyPolicyUrl: '/politica-de-privacidad',
+    contactUrl: '/contacto',
+    // Google Consent Mode v2 — leave empty if not using Google tags
+    gtmId: '',
+    gaMeasurementId: '',
+  },
+
   // ── Visual config ─────────────────────────────────────────
   // Reflected as CSS custom properties in global.css.
   // Values here act as the source of truth; global.css reads them at build time

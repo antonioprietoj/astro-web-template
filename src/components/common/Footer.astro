@@ -90,6 +90,13 @@ const socialLabels: Record<string, string> = {
         <ul class="footer__list" role="list">
           <li><a href="/aviso-legal"             class="footer__link">Aviso legal</a></li>
           <li><a href="/politica-de-privacidad"  class="footer__link">Política de privacidad</a></li>
+          {site.cookies.enabled && (
+            <li>
+              <button type="button" class="footer__link footer__link--btn" data-cc="show-preferences">
+                Configuración de cookies
+              </button>
+            </li>
+          )}
           <li><a href="/contacto"                class="footer__link">Contacto</a></li>
         </ul>
       </div>
@@ -191,6 +198,15 @@ const socialLabels: Record<string, string> = {
 
   .footer__link:hover {
     color: #fff;
+  }
+
+  .footer__link--btn {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font: inherit;
+    text-align: left;
   }
 
   .footer__address {
