@@ -19,8 +19,9 @@ export default defineConfig({
   },
   vite: {
     server: {
-      // Required when accessing via DDEV domain (nginx proxy)
-      allowedHosts: ['.ddev.site'],
+      // DDEV proxy: allow all *.ddev.site hosts + set public origin for asset URLs
+      allowedHosts: true,
+      origin: process.env.DDEV_PRIMARY_URL,
     },
   },
 });
