@@ -237,13 +237,45 @@ Para hosting con SSH, descomenta la sección `rsync` del workflow y usa `SFTP_KE
 
 ## Guardar nuevos componentes reutilizables
 
-Cuando en un proyecto crees un componente útil para futuros clientes:
+Cuando en un proyecto cliente crees algo útil para futuros proyectos, súbelo a la plantilla padre con:
 
-1. Cópialo a `src/content-library/<categoría>/<nombre>/`
-2. Crea un `README.md` dentro siguiendo la plantilla de `src/content-library/README.md`
-3. Haz commit: `docs(content-library): add <nombre>`
+```bash
+bash push-to-template.sh <origen> <destino-en-plantilla> [mensaje]
+```
 
-Consulta [`src/content-library/README.md`](src/content-library/README.md) para la guía completa.
+**Ejemplos:**
+
+```bash
+# Nuevo bloque de content-library
+bash push-to-template.sh \
+  src/content-library/sections/hero-video/ \
+  src/content-library/sections/hero-video/
+
+# Utilidad genérica
+bash push-to-template.sh \
+  src/utils/format-date.ts \
+  src/utils/format-date.ts \
+  "feat(utils): add formatDate helper"
+
+# Actualizar un preset de sector
+bash push-to-template.sh \
+  src/data/presets/index.ts \
+  src/data/presets/index.ts \
+  "feat(presets): add farmacia sector"
+```
+
+El script clona/actualiza la plantilla en `~/.cache/astro-web-template-push`, copia los ficheros y hace commit + push automáticamente.
+
+**Qué tiene sentido subir:**
+- Componentes o secciones no específicos del cliente
+- Helpers genéricos (`src/utils/`)
+- Nuevos presets de sector (`src/data/presets/`)
+- Mejoras a componentes base (Header, Footer, Button…)
+- Patrones de configuración DDEV/Astro útiles
+
+Cursor también lo propone automáticamente cuando detecta que has creado algo reutilizable.
+
+Consulta [`src/content-library/README.md`](src/content-library/README.md) para la estructura de documentación.
 
 ---
 
