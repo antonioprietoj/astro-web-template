@@ -1,0 +1,118 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Container from '@/components/ui/Container.astro';
+import SectionTitle from '@/components/ui/SectionTitle.astro';
+import Testimonials from '@/components/sections/Testimonials.astro';
+import CTA from '@/components/sections/CTA.astro';
+import { site } from '@/data/site';
+---
+
+<BaseLayout
+  title="Sobre nosotros"
+  description={`Conoce al equipo de ${site.name}. ${site.about.headline}.`}
+>
+  <!-- Page header -->
+  <section class="section section--alt page-header">
+    <Container>
+      <div class="page-header__inner">
+        <h1 class="page-header__title">{site.about.headline}</h1>
+        <p class="page-header__lead">{site.descriptionShort}</p>
+      </div>
+    </Container>
+  </section>
+
+  <!-- About body -->
+  <section class="section section--white about-full">
+    <Container>
+      <div class="about-full__grid">
+        <div class="about-full__text">
+          <SectionTitle title="Nuestra historia" align="left" />
+          <div class="about-full__body">
+            {site.about.body.map(para => <p>{para}</p>)}
+          </div>
+        </div>
+
+        <aside class="about-full__stats">
+          {site.about.stats.map(stat => (
+            <div class="stat">
+              <span class="stat__value">{stat.value}</span>
+              <span class="stat__label">{stat.label}</span>
+            </div>
+          ))}
+        </aside>
+      </div>
+    </Container>
+  </section>
+
+  <Testimonials />
+  <CTA />
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding-block: var(--space-20);
+    text-align: center;
+  }
+
+  .page-header__title {
+    font-size: var(--text-4xl);
+    margin-bottom: var(--space-4);
+  }
+
+  .page-header__lead {
+    font-size: var(--text-xl);
+    color: var(--color-neutral-light);
+    max-width: 60ch;
+    margin-inline: auto;
+  }
+
+  .about-full__grid {
+    display: grid;
+    gap: var(--space-12);
+    align-items: start;
+  }
+
+  @media (min-width: 768px) {
+    .about-full__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .about-full__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    color: var(--color-neutral-light);
+    line-height: var(--line-height-loose);
+  }
+
+  .about-full__stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+    align-self: center;
+  }
+
+  .stat {
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .stat__value {
+    font-size: var(--text-3xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+    line-height: 1;
+  }
+
+  .stat__label {
+    font-size: var(--text-sm);
+    color: var(--color-neutral-light);
+  }
+</style>

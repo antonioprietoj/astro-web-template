@@ -1,0 +1,98 @@
+---
+import { site } from '@/data/site';
+import SectionTitle from '@/components/ui/SectionTitle.astro';
+import Container from '@/components/ui/Container.astro';
+import Button from '@/components/ui/Button.astro';
+---
+
+<section class="section section--alt about-preview">
+  <Container>
+    <div class="about-preview__inner">
+      <div class="about-preview__content">
+        <SectionTitle
+          title={site.about.headline}
+          align="left"
+        />
+        <div class="about-preview__body">
+          {site.about.body.map(para => (
+            <p>{para}</p>
+          ))}
+        </div>
+        <div class="about-preview__actions">
+          <Button href="/sobre-nosotros" variant="secondary">
+            Conoce nuestro equipo
+          </Button>
+        </div>
+      </div>
+
+      <div class="about-preview__stats">
+        {site.about.stats.map(stat => (
+          <div class="stat-card">
+            <span class="stat-card__value">{stat.value}</span>
+            <span class="stat-card__label">{stat.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </Container>
+</section>
+
+<style>
+  .about-preview__inner {
+    display: grid;
+    gap: var(--space-12);
+    align-items: start;
+  }
+
+  @media (min-width: 768px) {
+    .about-preview__inner {
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+    }
+  }
+
+  .about-preview__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    color: var(--color-neutral-light);
+    line-height: var(--line-height-loose);
+    margin-bottom: var(--space-8);
+  }
+
+  .about-preview__actions {
+    display: flex;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+  }
+
+  .about-preview__stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+  }
+
+  .stat-card {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .stat-card__value {
+    font-size: var(--text-3xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+    line-height: 1;
+  }
+
+  .stat-card__label {
+    font-size: var(--text-sm);
+    color: var(--color-neutral-light);
+  }
+</style>

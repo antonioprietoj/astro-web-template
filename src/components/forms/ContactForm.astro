@@ -1,0 +1,317 @@
+---
+import { site } from '@/data/site';
+import Button from '@/components/ui/Button.astro';
+
+interface Props {
+  showServices?: boolean;
+  formAction?: string;  // Netlify / Formspree / custom endpoint
+}
+
+const {
+  showServices = true,
+  formAction   = '#',
+} = Astro.props;
+---
+
+<form
+  class="contact-form"
+  action={formAction}
+  method="POST"
+  novalidate
+  id="contact-form"
+  aria-label="Formulario de contacto"
+>
+  <!-- Honeypot anti-spam field -->
+  <input type="text" name="_honeypot" class="contact-form__honeypot" tabindex="-1" autocomplete="off" />
+
+  <div class="contact-form__row">
+    <div class="contact-form__field">
+      <label class="contact-form__label" for="cf-name">
+        Nombre completo <span class="contact-form__required" aria-hidden="true">*</span>
+      </label>
+      <input
+        type="text"
+        id="cf-name"
+        name="name"
+        class="contact-form__input"
+        placeholder="Tu nombre"
+        required
+        autocomplete="name"
+      />
+      <span class="contact-form__error" role="alert" aria-live="polite"></span>
+    </div>
+
+    <div class="contact-form__field">
+      <label class="contact-form__label" for="cf-phone">
+        Teléfono <span class="contact-form__required" aria-hidden="true">*</span>
+      </label>
+      <input
+        type="tel"
+        id="cf-phone"
+        name="phone"
+        class="contact-form__input"
+        placeholder="600 000 000"
+        required
+        autocomplete="tel"
+      />
+      <span class="contact-form__error" role="alert" aria-live="polite"></span>
+    </div>
+  </div>
+
+  <div class="contact-form__field">
+    <label class="contact-form__label" for="cf-email">
+      Correo electrónico <span class="contact-form__required" aria-hidden="true">*</span>
+    </label>
+    <input
+      type="email"
+      id="cf-email"
+      name="email"
+      class="contact-form__input"
+      placeholder="tu@email.com"
+      required
+      autocomplete="email"
+    />
+    <span class="contact-form__error" role="alert" aria-live="polite"></span>
+  </div>
+
+  {showServices && (
+    <div class="contact-form__field">
+      <label class="contact-form__label" for="cf-service">Servicio de interés</label>
+      <select id="cf-service" name="service" class="contact-form__input contact-form__select">
+        <option value="">— Selecciona un servicio —</option>
+        {site.services.map(s => (
+          <option value={s.slug}>{s.title}</option>
+        ))}
+        <option value="otro">Otro / No sé aún</option>
+      </select>
+    </div>
+  )}
+
+  <div class="contact-form__field">
+    <label class="contact-form__label" for="cf-message">
+      Mensaje <span class="contact-form__required" aria-hidden="true">*</span>
+    </label>
+    <textarea
+      id="cf-message"
+      name="message"
+      class="contact-form__input contact-form__textarea"
+      placeholder="Cuéntanos qué necesitas…"
+      rows="5"
+      required
+    ></textarea>
+    <span class="contact-form__error" role="alert" aria-live="polite"></span>
+  </div>
+
+  <div class="contact-form__field contact-form__field--checkbox">
+    <label class="contact-form__checkbox-label">
+      <input type="checkbox" name="privacy" required class="contact-form__checkbox" />
+      <span>
+        He leído y acepto la
+        <a href="/politica-de-privacidad" target="_blank">política de privacidad</a>
+      </span>
+    </label>
+    <span class="contact-form__error" role="alert" aria-live="polite"></span>
+  </div>
+
+  <div class="contact-form__submit">
+    <Button type="submit" size="lg" id="cf-submit">
+      Enviar solicitud
+    </Button>
+  </div>
+
+  <div class="contact-form__feedback" id="cf-feedback" hidden role="status" aria-live="polite"></div>
+</form>
+
+<script>
+  const form     = document.getElementById('contact-form')    as HTMLFormElement;
+  const feedback = document.getElementById('cf-feedback')     as HTMLDivElement;
+  const submit   = document.getElementById('cf-submit')       as HTMLButtonElement;
+
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!validateForm()) return;
+
+      submit.disabled   = true;
+      submit.textContent = 'Enviando…';
+
+      try {
+        const data = new FormData(form);
+
+        // Remove honeypot before sending
+        data.delete('_honeypot');
+
+        // Replace with your real endpoint (Netlify, Formspree, etc.)
+        // const res = await fetch(form.action, { method: 'POST', body: data });
+
+        // Demo: simulate success
+        await new Promise(r => setTimeout(r, 800));
+
+        showFeedback('success', '¡Mensaje enviado! Te contactaremos en breve.');
+        form.reset();
+      } catch {
+        showFeedback('error', 'Hubo un error. Llámanos directamente o prueba más tarde.');
+      } finally {
+        submit.disabled    = false;
+        submit.textContent = 'Enviar solicitud';
+      }
+    });
+  }
+
+  function validateForm(): boolean {
+    let valid = true;
+
+    form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('[required]').forEach(field => {
+      const errorEl = field.closest('.contact-form__field')
+        ?.querySelector<HTMLSpanElement>('.contact-form__error');
+
+      if (!field.validity.valid) {
+        valid = false;
+        field.classList.add('is-invalid');
+        if (errorEl) errorEl.textContent = field.validationMessage;
+      } else {
+        field.classList.remove('is-invalid');
+        if (errorEl) errorEl.textContent = '';
+      }
+    });
+
+    return valid;
+  }
+
+  function showFeedback(type: 'success' | 'error', msg: string) {
+    feedback.hidden      = false;
+    feedback.textContent = msg;
+    feedback.className   = `contact-form__feedback contact-form__feedback--${type}`;
+    feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+</script>
+
+<style>
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+
+  .contact-form__honeypot {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    height: 0;
+  }
+
+  .contact-form__row {
+    display: grid;
+    gap: var(--space-5);
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media (max-width: 599px) {
+    .contact-form__row {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .contact-form__field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .contact-form__label {
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-neutral);
+  }
+
+  .contact-form__required {
+    color: #ef4444;
+    margin-left: 2px;
+  }
+
+  .contact-form__input {
+    padding: var(--space-3) var(--space-4);
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: var(--text-base);
+    color: var(--color-neutral);
+    background-color: var(--color-surface);
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    width: 100%;
+  }
+
+  .contact-form__input:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgb(26 86 219 / 0.15);
+    outline: none;
+  }
+
+  .contact-form__input.is-invalid {
+    border-color: #ef4444;
+  }
+
+  .contact-form__select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right var(--space-3) center;
+    padding-right: var(--space-10);
+    cursor: pointer;
+  }
+
+  .contact-form__textarea {
+    resize: vertical;
+    min-height: 120px;
+  }
+
+  .contact-form__field--checkbox {
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .contact-form__checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    color: var(--color-neutral-light);
+    cursor: pointer;
+  }
+
+  .contact-form__checkbox {
+    margin-top: 2px;
+    flex-shrink: 0;
+    accent-color: var(--color-primary);
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .contact-form__error {
+    font-size: var(--text-xs);
+    color: #ef4444;
+    min-height: 1em;
+  }
+
+  .contact-form__submit {
+    margin-top: var(--space-2);
+  }
+
+  .contact-form__feedback {
+    padding: var(--space-4);
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-medium);
+  }
+
+  .contact-form__feedback--success {
+    background-color: #ecfdf5;
+    color: #065f46;
+    border: 1px solid #6ee7b7;
+  }
+
+  .contact-form__feedback--error {
+    background-color: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fca5a5;
+  }
+</style>

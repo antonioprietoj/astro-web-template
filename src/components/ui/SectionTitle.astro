@@ -1,0 +1,71 @@
+---
+interface Props {
+  title: string;
+  subtitle?: string;
+  align?: 'left' | 'center';
+  tag?: 'h1' | 'h2' | 'h3';
+  class?: string;
+}
+
+const {
+  title,
+  subtitle,
+  align = 'center',
+  tag: Tag = 'h2',
+  class: className,
+} = Astro.props;
+---
+
+<div class:list={['section-title', `section-title--${align}`, className]}>
+  <Tag class="section-title__heading">{title}</Tag>
+  {subtitle && <p class="section-title__subtitle">{subtitle}</p>}
+</div>
+
+<style>
+  .section-title {
+    margin-bottom: var(--space-12);
+  }
+
+  .section-title--center {
+    text-align: center;
+  }
+
+  .section-title--left {
+    text-align: left;
+  }
+
+  .section-title__heading {
+    font-size: var(--text-3xl);
+    font-weight: var(--font-weight-bold);
+    position: relative;
+    display: inline-block;
+    padding-bottom: var(--space-4);
+  }
+
+  .section-title__heading::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 3rem;
+    height: 3px;
+    background-color: var(--color-primary);
+    border-radius: var(--radius-full);
+  }
+
+  .section-title--center .section-title__heading::after {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .section-title__subtitle {
+    margin-top: var(--space-4);
+    font-size: var(--text-lg);
+    color: var(--color-neutral-light);
+    max-width: 60ch;
+  }
+
+  .section-title--center .section-title__subtitle {
+    margin-inline: auto;
+  }
+</style>

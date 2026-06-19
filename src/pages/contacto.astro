@@ -1,0 +1,185 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Container from '@/components/ui/Container.astro';
+import SectionTitle from '@/components/ui/SectionTitle.astro';
+import ContactForm from '@/components/forms/ContactForm.astro';
+import { site } from '@/data/site';
+import { whatsappUrl, tel, mailto } from '@/utils/seo';
+---
+
+<BaseLayout
+  title="Contacto"
+  description={`Contacta con ${site.name}. Presupuesto gratuito sin compromiso. Teléfono: ${site.phoneFormatted}. Email: ${site.email}.`}
+>
+  <section class="section section--alt contact-page">
+    <Container>
+      <SectionTitle
+        title="Contacta con nosotros"
+        subtitle="Presupuesto gratuito y sin compromiso. Te respondemos en menos de 24 horas."
+      />
+
+      <div class="contact-page__grid">
+        <!-- Form -->
+        <div class="contact-page__form-wrap">
+          <div class="contact-card">
+            <h2 class="contact-card__title">Escríbenos</h2>
+            <ContactForm showServices />
+          </div>
+        </div>
+
+        <!-- Sidebar info -->
+        <aside class="contact-page__sidebar">
+          <div class="contact-card">
+            <h2 class="contact-card__title">Otros canales</h2>
+
+            <ul class="contact-info" role="list">
+              <li class="contact-info__item">
+                <span class="contact-info__icon" aria-hidden="true">📞</span>
+                <div>
+                  <p class="contact-info__label">Teléfono</p>
+                  <a href={tel()} class="contact-info__value">{site.phoneFormatted}</a>
+                </div>
+              </li>
+
+              <li class="contact-info__item">
+                <span class="contact-info__icon" aria-hidden="true">💬</span>
+                <div>
+                  <p class="contact-info__label">WhatsApp</p>
+                  <a
+                    href={whatsappUrl()}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="contact-info__value"
+                  >
+                    Enviar mensaje
+                  </a>
+                </div>
+              </li>
+
+              <li class="contact-info__item">
+                <span class="contact-info__icon" aria-hidden="true">✉️</span>
+                <div>
+                  <p class="contact-info__label">Email</p>
+                  <a href={mailto()} class="contact-info__value">{site.email}</a>
+                </div>
+              </li>
+
+              <li class="contact-info__item">
+                <span class="contact-info__icon" aria-hidden="true">📍</span>
+                <div>
+                  <p class="contact-info__label">Dirección</p>
+                  <a
+                    href={site.address.mapsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="contact-info__value"
+                  >
+                    {site.address.street}<br />
+                    {site.address.zip} {site.address.city}
+                  </a>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="contact-card">
+            <h2 class="contact-card__title">Horario</h2>
+            <ul class="schedule-list" role="list">
+              <li>{site.schedule.weekdays}</li>
+              <li>{site.schedule.saturday}</li>
+              <li class="schedule-list__closed">{site.schedule.sunday}</li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+    </Container>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact-page__grid {
+    display: grid;
+    gap: var(--space-8);
+    align-items: start;
+  }
+
+  @media (min-width: 768px) {
+    .contact-page__grid {
+      grid-template-columns: 1fr 380px;
+    }
+  }
+
+  .contact-card {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-8);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .contact-card__title {
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-6);
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .contact-page__sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .contact-info__item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-4);
+  }
+
+  .contact-info__icon {
+    font-size: 1.5rem;
+    line-height: 1;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+
+  .contact-info__label {
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-neutral-light);
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: var(--space-1);
+  }
+
+  .contact-info__value {
+    font-size: var(--text-base);
+    color: var(--color-neutral);
+    font-weight: var(--font-weight-medium);
+    text-decoration: none;
+    line-height: var(--line-height-normal);
+  }
+
+  .contact-info__value:hover {
+    color: var(--color-primary);
+  }
+
+  .schedule-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    font-size: var(--text-sm);
+    color: var(--color-neutral-light);
+  }
+
+  .schedule-list__closed {
+    color: #9ca3af;
+    text-decoration: line-through;
+  }
+</style>

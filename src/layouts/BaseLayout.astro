@@ -1,0 +1,65 @@
+---
+import { site } from '@/data/site';
+import { buildSeo } from '@/utils/seo';
+import type { SeoProps } from '@/utils/seo';
+import Header from '@/components/common/Header.astro';
+import Footer from '@/components/common/Footer.astro';
+import '@/styles/global.css';
+
+interface Props extends SeoProps {}
+
+const { title, description, image, noIndex, canonical } = Astro.props;
+const seo = buildSeo({ title, description, image });
+const canonicalUrl = canonical ?? Astro.url.href;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <title>{seo.title}</title>
+    <meta name="description" content={seo.description} />
+
+    {noIndex && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- Open Graph -->
+    <meta property="og:type"        content="website" />
+    <meta property="og:url"         content={canonicalUrl} />
+    <meta property="og:title"       content={seo.title} />
+    <meta property="og:description" content={seo.description} />
+    <meta property="og:image"       content={seo.image} />
+    <meta property="og:locale"      content={site.seo.locale} />
+    <meta property="og:site_name"   content={site.name} />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card"        content="summary_large_image" />
+    <meta name="twitter:title"       content={seo.title} />
+    <meta name="twitter:description" content={seo.description} />
+    <meta name="twitter:image"       content={seo.image} />
+    {site.seo.twitterHandle && (
+      <meta name="twitter:site" content={site.seo.twitterHandle} />
+    )}
+
+    <!-- Favicon -->
+    <link rel="icon"             href="/favicon.svg"              type="image/svg+xml" />
+    <link rel="icon"             href="/favicon.ico"              sizes="any" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- Preconnect for Google Fonts (optional — uncomment if you add a font) -->
+    <!-- <link rel="preconnect" href="https://fonts.googleapis.com" /> -->
+    <!-- <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /> -->
+
+    <slot name="head" />
+  </head>
+  <body>
+    <Header />
+    <main id="main-content">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

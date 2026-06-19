@@ -1,0 +1,262 @@
+---
+import { site } from '@/data/site';
+import Container from '@/components/ui/Container.astro';
+import Button from '@/components/ui/Button.astro';
+
+const nav = [
+  { label: 'Inicio',           href: '/'                },
+  { label: 'Servicios',        href: '/servicios'       },
+  { label: 'Sobre nosotros',   href: '/sobre-nosotros'  },
+  { label: 'Contacto',         href: '/contacto'        },
+];
+
+const currentPath = Astro.url.pathname;
+
+function isActive(href: string) {
+  if (href === '/') return currentPath === '/';
+  return currentPath.startsWith(href);
+}
+---
+
+<header class="header" role="banner">
+  <Container>
+    <div class="header__inner">
+      <!-- Logo / brand -->
+      <a href="/" class="header__logo" aria-label={`Inicio — ${site.name}`}>
+        <span class="header__logo-text">{site.name}</span>
+      </a>
+
+      <!-- Desktop navigation -->
+      <nav class="header__nav" aria-label="Navegación principal">
+        <ul class="header__nav-list" role="list">
+          {nav.map(({ label, href }) => (
+            <li>
+              <a
+                href={href}
+                class:list={['header__nav-link', isActive(href) && 'header__nav-link--active']}
+                aria-current={isActive(href) ? 'page' : undefined}
+              >
+                {label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <!-- CTA + mobile toggle -->
+      <div class="header__actions">
+        <Button href="/contacto" size="sm" class="header__cta">
+          {site.cta.primary.text}
+        </Button>
+
+        <button
+          class="header__burger"
+          aria-label="Abrir menú"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+          id="burger-btn"
+        >
+          <span class="header__burger-line"></span>
+          <span class="header__burger-line"></span>
+          <span class="header__burger-line"></span>
+        </button>
+      </div>
+    </div>
+  </Container>
+
+  <!-- Mobile menu -->
+  <div class="header__mobile" id="mobile-menu" hidden>
+    <Container>
+      <nav aria-label="Menú móvil">
+        <ul role="list">
+          {nav.map(({ label, href }) => (
+            <li>
+              <a
+                href={href}
+                class:list={['header__mobile-link', isActive(href) && 'header__mobile-link--active']}
+                aria-current={isActive(href) ? 'page' : undefined}
+              >
+                {label}
+              </a>
+            </li>
+          ))}
+        </ul>
+        <div class="header__mobile-cta">
+          <Button href="/contacto" size="lg" style="width:100%; justify-content:center;">
+            {site.cta.primary.text}
+          </Button>
+        </div>
+      </nav>
+    </Container>
+  </div>
+</header>
+
+<script>
+  const btn   = document.getElementById('burger-btn') as HTMLButtonElement;
+  const menu  = document.getElementById('mobile-menu') as HTMLDivElement;
+  const links = menu?.querySelectorAll<HTMLAnchorElement>('.header__mobile-link');
+
+  function toggle(open: boolean) {
+    menu.hidden    = !open;
+    btn.setAttribute('aria-expanded', String(open));
+    btn.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+    btn.classList.toggle('is-open', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  }
+
+  btn?.addEventListener('click', () => {
+    toggle(menu.hidden);
+  });
+
+  links?.forEach(link => link.addEventListener('click', () => toggle(false)));
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && !menu.hidden) toggle(false);
+  });
+</script>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-header);
+    background-color: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    height: 4rem;
+  }
+
+  /* Logo */
+  .header__logo {
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+
+  .header__logo-text {
+    font-size: var(--text-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+    letter-spacing: -0.02em;
+  }
+
+  /* Desktop nav */
+  .header__nav {
+    display: none;
+  }
+
+  .header__nav-list {
+    display: flex;
+    gap: var(--space-1);
+  }
+
+  .header__nav-link {
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-neutral);
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    transition: color var(--transition-fast), background-color var(--transition-fast);
+  }
+
+  .header__nav-link:hover,
+  .header__nav-link--active {
+    color: var(--color-primary);
+    background-color: var(--color-primary-light);
+  }
+
+  /* Actions */
+  .header__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .header__cta {
+    display: none;
+  }
+
+  /* Burger */
+  .header__burger {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 2.25rem;
+    height: 2.25rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: var(--space-2);
+    border-radius: var(--radius-md);
+  }
+
+  .header__burger-line {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background-color: var(--color-neutral);
+    border-radius: 2px;
+    transition: transform var(--transition-fast), opacity var(--transition-fast);
+  }
+
+  .header__burger.is-open .header__burger-line:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+  .header__burger.is-open .header__burger-line:nth-child(2) {
+    opacity: 0;
+  }
+  .header__burger.is-open .header__burger-line:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  /* Mobile menu */
+  .header__mobile {
+    border-top: 1px solid var(--color-border);
+    background-color: var(--color-surface);
+    padding-block: var(--space-4);
+  }
+
+  .header__mobile ul {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    margin-bottom: var(--space-6);
+  }
+
+  .header__mobile-link {
+    display: block;
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-neutral);
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    transition: color var(--transition-fast), background-color var(--transition-fast);
+  }
+
+  .header__mobile-link:hover,
+  .header__mobile-link--active {
+    color: var(--color-primary);
+    background-color: var(--color-primary-light);
+  }
+
+  /* Desktop breakpoint */
+  @media (min-width: 768px) {
+    .header__nav,
+    .header__cta {
+      display: flex;
+    }
+
+    .header__burger {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,91 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Hero from '@/components/sections/Hero.astro';
+import Container from '@/components/ui/Container.astro';
+import SectionTitle from '@/components/ui/SectionTitle.astro';
+import CTA from '@/components/sections/CTA.astro';
+import { site } from '@/data/site';
+---
+
+<BaseLayout
+  title="Servicios"
+  description={`Servicios de reformas integrales en ${site.city}: ${site.services.map(s => s.title).join(', ')}.`}
+>
+  <Hero
+    title="Nuestros servicios"
+    subtitle="Todo lo que necesita tu hogar"
+    showWhatsapp={false}
+  />
+
+  <section class="section section--white services-detail">
+    <Container>
+      <SectionTitle
+        title="¿Qué hacemos?"
+        subtitle="Soluciones completas para cada tipo de reforma o trabajo."
+      />
+
+      <div class="services-detail__list">
+        {site.services.map(service => (
+          <article class="service-detail" id={service.slug}>
+            <div class="service-detail__icon" aria-hidden="true">{service.icon}</div>
+            <div class="service-detail__content">
+              <h2 class="service-detail__title">{service.title}</h2>
+              <p class="service-detail__summary">{service.summary}</p>
+              <p class="service-detail__description">{service.description}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </Container>
+  </section>
+
+  <CTA title="¿Te interesa alguno de nuestros servicios?" />
+</BaseLayout>
+
+<style>
+  .services-detail__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-10);
+  }
+
+  .service-detail {
+    display: grid;
+    gap: var(--space-6);
+    align-items: start;
+    padding: var(--space-8);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    background-color: var(--color-surface);
+    box-shadow: var(--shadow-sm);
+    scroll-margin-top: 5rem;
+  }
+
+  @media (min-width: 640px) {
+    .service-detail {
+      grid-template-columns: 4rem 1fr;
+    }
+  }
+
+  .service-detail__icon {
+    font-size: 3rem;
+    line-height: 1;
+  }
+
+  .service-detail__title {
+    font-size: var(--text-2xl);
+    margin-bottom: var(--space-2);
+    color: var(--color-primary);
+  }
+
+  .service-detail__summary {
+    font-weight: var(--font-weight-medium);
+    margin-bottom: var(--space-3);
+    color: var(--color-neutral);
+  }
+
+  .service-detail__description {
+    color: var(--color-neutral-light);
+    line-height: var(--line-height-loose);
+  }
+</style>

@@ -1,0 +1,212 @@
+---
+import { site } from '@/data/site';
+import Container from '@/components/ui/Container.astro';
+import { whatsappUrl, tel, mailto } from '@/utils/seo';
+
+const year = new Date().getFullYear();
+
+const socialLinks = Object.entries(site.social)
+  .filter(([, url]) => Boolean(url)) as [string, string][];
+
+const socialLabels: Record<string, string> = {
+  facebook:  'Facebook',
+  instagram: 'Instagram',
+  linkedin:  'LinkedIn',
+  twitter:   'Twitter / X',
+  youtube:   'YouTube',
+  tiktok:    'TikTok',
+};
+---
+
+<footer class="footer" role="contentinfo">
+  <Container>
+    <div class="footer__grid">
+      <!-- Brand column -->
+      <div class="footer__brand">
+        <a href="/" class="footer__logo">{site.name}</a>
+        <p class="footer__desc">{site.descriptionShort}</p>
+        {socialLinks.length > 0 && (
+          <ul class="footer__social" role="list">
+            {socialLinks.map(([network, url]) => (
+              <li>
+                <a
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={socialLabels[network] ?? network}
+                  class="footer__social-link"
+                >
+                  {socialLabels[network] ?? network}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      <!-- Contact column -->
+      <div class="footer__col">
+        <h3 class="footer__heading">Contacto</h3>
+        <ul class="footer__list" role="list">
+          <li>
+            <a href={tel()} class="footer__link">
+              📞 {site.phoneFormatted}
+            </a>
+          </li>
+          <li>
+            <a href={mailto()} class="footer__link">
+              ✉️ {site.email}
+            </a>
+          </li>
+          <li>
+            <a
+              href={whatsappUrl()}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="footer__link"
+            >
+              💬 WhatsApp
+            </a>
+          </li>
+          <li class="footer__address">
+            📍 {site.address.street}, {site.address.zip} {site.address.city}
+          </li>
+        </ul>
+      </div>
+
+      <!-- Schedule column -->
+      <div class="footer__col">
+        <h3 class="footer__heading">Horario</h3>
+        <ul class="footer__list" role="list">
+          <li>{site.schedule.weekdays}</li>
+          <li>{site.schedule.saturday}</li>
+          <li>{site.schedule.sunday}</li>
+        </ul>
+      </div>
+
+      <!-- Legal column -->
+      <div class="footer__col">
+        <h3 class="footer__heading">Información</h3>
+        <ul class="footer__list" role="list">
+          <li><a href="/aviso-legal"             class="footer__link">Aviso legal</a></li>
+          <li><a href="/politica-de-privacidad"  class="footer__link">Política de privacidad</a></li>
+          <li><a href="/contacto"                class="footer__link">Contacto</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <p class="footer__copy">
+        © {year} {site.legal.companyName}. Todos los derechos reservados.
+      </p>
+      <p class="footer__credits">
+        <span>Madrid, España</span>
+      </p>
+    </div>
+  </Container>
+</footer>
+
+<style>
+  .footer {
+    background-color: #111827;
+    color: #d1d5db;
+    padding-top: var(--space-16);
+    padding-bottom: var(--space-8);
+    margin-top: var(--space-16);
+  }
+
+  .footer__grid {
+    display: grid;
+    gap: var(--space-10);
+    grid-template-columns: 1fr;
+    margin-bottom: var(--space-12);
+  }
+
+  @media (min-width: 640px) {
+    .footer__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .footer__grid {
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+    }
+  }
+
+  .footer__logo {
+    display: inline-block;
+    font-size: var(--text-xl);
+    font-weight: var(--font-weight-bold);
+    color: #fff;
+    text-decoration: none;
+    margin-bottom: var(--space-4);
+  }
+
+  .footer__desc {
+    font-size: var(--text-sm);
+    line-height: var(--line-height-loose);
+    max-width: 30ch;
+    margin-bottom: var(--space-4);
+  }
+
+  .footer__social {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .footer__social-link {
+    font-size: var(--text-sm);
+    color: #9ca3af;
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  .footer__social-link:hover {
+    color: #fff;
+  }
+
+  .footer__heading {
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #fff;
+    margin-bottom: var(--space-4);
+  }
+
+  .footer__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    font-size: var(--text-sm);
+  }
+
+  .footer__link {
+    color: #9ca3af;
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  .footer__link:hover {
+    color: #fff;
+  }
+
+  .footer__address {
+    color: #9ca3af;
+    font-size: var(--text-sm);
+  }
+
+  .footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    justify-content: space-between;
+    align-items: center;
+    padding-top: var(--space-6);
+    border-top: 1px solid #374151;
+    font-size: var(--text-xs);
+    color: #6b7280;
+  }
+</style>

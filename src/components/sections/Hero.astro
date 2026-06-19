@@ -1,0 +1,190 @@
+---
+import { site } from '@/data/site';
+import Button from '@/components/ui/Button.astro';
+import Container from '@/components/ui/Container.astro';
+import { whatsappUrl } from '@/utils/seo';
+
+interface Props {
+  title?: string;
+  subtitle?: string;
+  ctaPrimary?: { text: string; href: string };
+  ctaSecondary?: { text: string; href: string };
+  showWhatsapp?: boolean;
+  image?: string;
+  imageAlt?: string;
+}
+
+const {
+  title       = site.name,
+  subtitle    = site.tagline,
+  ctaPrimary  = site.cta.primary,
+  ctaSecondary = site.cta.secondary,
+  showWhatsapp = true,
+  image,
+  imageAlt    = site.name,
+} = Astro.props;
+---
+
+<section class="hero" aria-label="Presentación principal">
+  <Container>
+    <div class:list={['hero__inner', image && 'hero__inner--split']}>
+      <div class="hero__content animate-fade-in-up">
+        <h1 class="hero__title">{title}</h1>
+        <p class="hero__subtitle">{subtitle}</p>
+        <p class="hero__desc">{site.descriptionShort}</p>
+
+        <div class="hero__actions">
+          <Button href={ctaPrimary.href} size="lg">
+            {ctaPrimary.text}
+          </Button>
+          <Button href={ctaSecondary.href} variant="secondary" size="lg">
+            {ctaSecondary.text}
+          </Button>
+        </div>
+
+        {showWhatsapp && (
+          <a
+            href={whatsappUrl()}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="hero__whatsapp"
+          >
+            <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+            {site.cta.whatsapp.text}
+          </a>
+        )}
+      </div>
+
+      {image && (
+        <div class="hero__image-wrap">
+          <img
+            src={image}
+            alt={imageAlt}
+            class="hero__image"
+            loading="eager"
+            width="600"
+            height="500"
+          />
+        </div>
+      )}
+    </div>
+  </Container>
+</section>
+
+<style>
+  .hero {
+    background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-surface) 60%);
+    padding-block: var(--space-20);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -10%;
+    right: -5%;
+    width: 40%;
+    aspect-ratio: 1;
+    background: radial-gradient(circle, var(--color-primary) 0%, transparent 70%);
+    opacity: 0.06;
+    pointer-events: none;
+  }
+
+  .hero__inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+    align-items: center;
+  }
+
+  .hero__inner--split {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .hero__content {
+    max-width: 650px;
+  }
+
+  .hero__inner--split .hero__content {
+    flex: 1 1 50%;
+  }
+
+  .hero__title {
+    font-size: var(--text-5xl);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-tight);
+    color: var(--color-neutral);
+    margin-bottom: var(--space-4);
+  }
+
+  .hero__subtitle {
+    font-size: var(--text-2xl);
+    color: var(--color-primary);
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: var(--space-6);
+  }
+
+  .hero__desc {
+    font-size: var(--text-lg);
+    color: var(--color-neutral-light);
+    line-height: var(--line-height-loose);
+    margin-bottom: var(--space-8);
+    max-width: 55ch;
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+  }
+
+  .hero__whatsapp {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: #25d366;
+    font-weight: var(--font-weight-semibold);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    transition: opacity var(--transition-fast);
+  }
+
+  .hero__whatsapp:hover {
+    opacity: 0.85;
+    color: #25d366;
+  }
+
+  .hero__image-wrap {
+    flex: 1 1 45%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hero__image {
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-xl);
+    object-fit: cover;
+    width: 100%;
+    max-width: 520px;
+  }
+
+  @media (max-width: 767px) {
+    .hero__inner--split {
+      flex-direction: column;
+    }
+
+    .hero__title {
+      font-size: var(--text-4xl);
+    }
+
+    .hero__actions {
+      flex-direction: column;
+    }
+  }
+</style>

@@ -1,0 +1,21 @@
+name: astro-web-template
+type: nodejs
+nodejs_version: "20"
+docroot: dist
+
+# Expose Astro dev server port so it's accessible via browser during development
+web_extra_exposed_ports:
+  - name: astro-dev
+    container_port: 4321
+    http_port: 4321
+    https_port: 4322
+
+# Auto-install deps on start
+hooks:
+  post-start:
+    - exec: "if [ ! -d node_modules ]; then npm install; fi"
+
+# Override the default web command so `ddev start` also serves the built dist/
+# For dev: use `ddev npm run dev` instead
+web_environment:
+  - NODE_ENV=development

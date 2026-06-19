@@ -1,0 +1,70 @@
+---
+description: Reglas de desarrollo para la plantilla Astro de webs de clientes
+globs: ["**/*.astro", "**/*.ts", "**/*.css"]
+alwaysApply: true
+---
+
+# Reglas del proyecto — Astro Web Template
+
+## Arquitectura y datos
+
+- **Los datos del cliente van SIEMPRE en `src/data/site.ts`**. Nunca hardcodees nombre, teléfono,
+  email, servicios ni textos del cliente directamente en componentes o páginas.
+- Cuando cambies de cliente, edita `src/data/site.ts` y actualiza `site` en `astro.config.mjs`.
+- No toques los componentes base salvo que haya un bug real o mejora estructural.
+
+## Componentes y reutilización
+
+- **Antes de crear un componente nuevo, comprueba si ya existe** en `src/components/` o en
+  `src/content-library/`. Reutiliza siempre que sea posible.
+- Si creas un componente nuevo que sea útil para otros proyectos, guárdalo también en
+  `src/content-library/<categoría>/<nombre>/` con su README.
+- Mantén la estructura de carpetas:
+  - `src/components/common/` → Header, Footer, Nav
+  - `src/components/sections/` → secciones de página (Hero, CTA, FAQ…)
+  - `src/components/ui/` → piezas atómicas (Button, SectionTitle, Container…)
+  - `src/components/forms/` → formularios
+
+## Estilos y CSS
+
+- Usa siempre las variables CSS de `src/styles/global.css` (`--color-primary`, `--space-*`, etc.).
+- No instales Tailwind, Bootstrap ni ningún framework CSS externo.
+- Cada componente Astro tiene su `<style>` scoped. CSS global solo en `global.css`.
+- El diseño debe ser responsive. Breakpoints principales: 640px (sm), 768px (md), 1024px (lg).
+
+## Dependencias
+
+- No instales dependencias npm sin una razón clara y documentada.
+- Las únicas dependencias previstas son `astro` y `@astrojs/sitemap`.
+- Para iconos: usa emojis unicode o SVGs inline. No instales librerías de iconos.
+
+## SEO y rendimiento
+
+- Cada página define su `title` y `description` en el frontmatter de `BaseLayout`.
+- Las páginas legales usan `LegalLayout` con `noIndex: true`.
+- Las imágenes deben tener `alt`, `width` y `height`. Usa `loading="lazy"` salvo en el hero.
+- El favicon se actualiza en `public/favicon.svg` para cada cliente.
+- Actualiza `site` en `astro.config.mjs` con la URL de producción real antes de hacer build.
+
+## DDEV
+
+- Mantén compatibilidad con DDEV. El proyecto corre con `ddev npm run dev`.
+- No cambies el tipo de proyecto DDEV ni el puerto 4321.
+- El build estático va a `dist/`. Esa carpeta se sube al hosting.
+
+## Accesibilidad
+
+- Todo elemento interactivo tiene `aria-label` descriptivo si no tiene texto visible.
+- Los formularios usan `<label>` asociado con `for`/`id`.
+- Usa roles semánticos: `role="list"` en `<ul>` de contenido, `aria-current="page"` en nav activo.
+- El orden de encabezados `h1 > h2 > h3` debe ser correcto en cada página.
+
+## Flujo para nuevo proyecto de cliente
+
+1. Clona el repo: `git clone <template-repo> nuevo-cliente && cd nuevo-cliente`
+2. Edita `src/data/site.ts` con todos los datos del cliente.
+3. Actualiza `site` en `astro.config.mjs` con la URL real.
+4. Cambia `favicon.svg` y añade imágenes en `public/images/`.
+5. Ajusta colores en `:root` de `global.css` si el cliente tiene marca propia.
+6. `ddev start && ddev npm run dev` para previsualizar.
+7. `ddev npm run build` → sube `dist/` al hosting.

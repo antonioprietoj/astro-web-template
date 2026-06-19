@@ -1,0 +1,50 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Container from '@/components/ui/Container.astro';
+import type { SeoProps } from '@/utils/seo';
+
+interface Props extends SeoProps {
+  title: string;
+  lastUpdated?: string;
+}
+
+const { title, lastUpdated, ...seoProps } = Astro.props;
+---
+
+<BaseLayout title={title} noIndex={true} {...seoProps}>
+  <section class="legal-page section section--white">
+    <Container>
+      <div class="legal-page__header">
+        <h1 class="legal-page__title">{title}</h1>
+        {lastUpdated && (
+          <p class="legal-page__date">Última actualización: {lastUpdated}</p>
+        )}
+      </div>
+      <div class="prose">
+        <slot />
+      </div>
+    </Container>
+  </section>
+</BaseLayout>
+
+<style>
+  .legal-page {
+    min-height: 60vh;
+  }
+
+  .legal-page__header {
+    margin-bottom: var(--space-10);
+    padding-bottom: var(--space-6);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .legal-page__title {
+    font-size: var(--text-4xl);
+    margin-bottom: var(--space-2);
+  }
+
+  .legal-page__date {
+    color: var(--color-neutral-light);
+    font-size: var(--text-sm);
+  }
+</style>

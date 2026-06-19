@@ -1,0 +1,115 @@
+---
+import { site } from '@/data/site';
+import SectionTitle from '@/components/ui/SectionTitle.astro';
+import Container from '@/components/ui/Container.astro';
+import Button from '@/components/ui/Button.astro';
+
+interface Props {
+  featuredOnly?: boolean;
+  showCta?: boolean;
+  title?: string;
+  subtitle?: string;
+}
+
+const {
+  featuredOnly = false,
+  showCta      = true,
+  title        = 'Nuestros servicios',
+  subtitle     = 'Todo lo que necesitas para tu reforma, en un solo lugar.',
+} = Astro.props;
+
+const services = featuredOnly
+  ? site.services.filter(s => s.featured)
+  : site.services;
+---
+
+<section class="section section--white services">
+  <Container>
+    <SectionTitle {title} {subtitle} />
+
+    <ul class="services__grid" role="list">
+      {services.map(service => (
+        <li class="service-card">
+          <div class="service-card__icon" aria-hidden="true">{service.icon}</div>
+          <h3 class="service-card__title">{service.title}</h3>
+          <p class="service-card__text">{service.summary}</p>
+          <a href={`/servicios#${service.slug}`} class="service-card__link">
+            Ver más <span aria-hidden="true">→</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    {showCta && (
+      <div class="services__cta">
+        <Button href="/servicios" variant="secondary">
+          Ver todos los servicios
+        </Button>
+      </div>
+    )}
+  </Container>
+</section>
+
+<style>
+  .services__grid {
+    display: grid;
+    gap: var(--space-6);
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    margin-bottom: var(--space-10);
+  }
+
+  .service-card {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-8);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow var(--transition-base), transform var(--transition-base);
+  }
+
+  .service-card:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-3px);
+  }
+
+  .service-card__icon {
+    font-size: 2.5rem;
+    line-height: 1;
+  }
+
+  .service-card__title {
+    font-size: var(--text-xl);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-neutral);
+  }
+
+  .service-card__text {
+    color: var(--color-neutral-light);
+    line-height: var(--line-height-normal);
+    flex: 1;
+  }
+
+  .service-card__link {
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-primary);
+    text-decoration: none;
+    margin-top: auto;
+    transition: gap var(--transition-fast);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+  }
+
+  .service-card__link:hover {
+    color: var(--color-primary-dark);
+    gap: var(--space-2);
+  }
+
+  .services__cta {
+    text-align: center;
+  }
+</style>

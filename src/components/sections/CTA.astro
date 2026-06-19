@@ -1,0 +1,131 @@
+---
+import { site } from '@/data/site';
+import Container from '@/components/ui/Container.astro';
+import Button from '@/components/ui/Button.astro';
+import { whatsappUrl, tel } from '@/utils/seo';
+
+interface Props {
+  title?: string;
+  subtitle?: string;
+  showPhone?: boolean;
+  showWhatsapp?: boolean;
+  variant?: 'primary' | 'dark';
+}
+
+const {
+  title        = '¿Listo para transformar tu hogar?',
+  subtitle     = 'Solicita tu presupuesto gratuito hoy. Sin compromiso, sin esperas.',
+  showPhone    = true,
+  showWhatsapp = true,
+  variant      = 'primary',
+} = Astro.props;
+---
+
+<section class:list={['cta-section', `cta-section--${variant}`]} aria-label="Llamada a la acción">
+  <Container>
+    <div class="cta-section__inner">
+      <div class="cta-section__text">
+        <h2 class="cta-section__title">{title}</h2>
+        <p class="cta-section__subtitle">{subtitle}</p>
+      </div>
+
+      <div class="cta-section__actions">
+        <Button href={site.cta.primary.href} variant="accent" size="lg">
+          {site.cta.primary.text}
+        </Button>
+
+        {showPhone && (
+          <a href={tel()} class="cta-section__phone">
+            📞 {site.phoneFormatted}
+          </a>
+        )}
+
+        {showWhatsapp && (
+          <a
+            href={whatsappUrl()}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="cta-section__wa"
+          >
+            💬 WhatsApp
+          </a>
+        )}
+      </div>
+    </div>
+  </Container>
+</section>
+
+<style>
+  .cta-section {
+    padding-block: var(--space-16);
+  }
+
+  .cta-section--primary {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+    color: #fff;
+  }
+
+  .cta-section--dark {
+    background-color: #111827;
+    color: #fff;
+  }
+
+  .cta-section__inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-8);
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .cta-section__text {
+    flex: 1 1 300px;
+  }
+
+  .cta-section__title {
+    font-size: var(--text-3xl);
+    font-weight: var(--font-weight-bold);
+    color: inherit;
+    margin-bottom: var(--space-3);
+    line-height: var(--line-height-tight);
+  }
+
+  .cta-section__subtitle {
+    font-size: var(--text-lg);
+    opacity: 0.85;
+  }
+
+  .cta-section__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    align-items: center;
+  }
+
+  .cta-section__phone,
+  .cta-section__wa {
+    color: #fff;
+    font-weight: var(--font-weight-semibold);
+    text-decoration: none;
+    font-size: var(--text-base);
+    opacity: 0.9;
+    transition: opacity var(--transition-fast);
+  }
+
+  .cta-section__phone:hover,
+  .cta-section__wa:hover {
+    opacity: 1;
+    color: #fff;
+  }
+
+  @media (max-width: 767px) {
+    .cta-section__inner {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .cta-section__actions {
+      justify-content: center;
+    }
+  }
+</style>
