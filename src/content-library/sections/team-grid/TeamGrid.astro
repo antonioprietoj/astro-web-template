@@ -1,0 +1,95 @@
+---
+import Container from '@/components/ui/Container.astro';
+import SectionTitle from '@/components/ui/SectionTitle.astro';
+
+export interface TeamMember {
+  name: string;
+  role: string;
+  bio?: string;
+  image?: string;
+  linkedin?: string;
+}
+
+interface Props {
+  title?: string;
+  subtitle?: string;
+  members: TeamMember[];
+}
+
+const {
+  title = 'Nuestro equipo',
+  subtitle = 'Las personas detrás del proyecto.',
+  members,
+} = Astro.props;
+---
+
+<section class="section section--alt team">
+  <Container>
+    <SectionTitle {title} {subtitle} />
+    <ul class="team__grid" role="list">
+      {members.map(m => (
+        <li class="team-card">
+          {m.image
+            ? <img src={m.image} alt={m.name} class="team-card__img" width="200" height="200" loading="lazy" />
+            : <div class="team-card__avatar" aria-hidden="true">{m.name.charAt(0)}</div>
+          }
+          <h3 class="team-card__name">{m.name}</h3>
+          <p class="team-card__role">{m.role}</p>
+          {m.bio && <p class="team-card__bio">{m.bio}</p>}
+          {m.linkedin && (
+            <a href={m.linkedin} target="_blank" rel="noopener noreferrer" class="team-card__link" aria-label={`LinkedIn de ${m.name}`}>
+              LinkedIn →
+            </a>
+          )}
+        </li>
+      ))}
+    </ul>
+  </Container>
+</section>
+
+<style>
+  .team__grid {
+    display: grid;
+    gap: var(--space-6);
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  }
+
+  .team-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-8);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow var(--transition-base), transform var(--transition-base);
+  }
+
+  .team-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+
+  .team-card__img {
+    width: 6rem; height: 6rem;
+    border-radius: var(--radius-full);
+    object-fit: cover;
+    margin-bottom: var(--space-2);
+  }
+
+  .team-card__avatar {
+    width: 6rem; height: 6rem;
+    border-radius: var(--radius-full);
+    background: var(--color-primary-light);
+    color: var(--color-primary);
+    font-size: var(--text-3xl);
+    font-weight: var(--font-weight-bold);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: var(--space-2);
+  }
+
+  .team-card__name { font-size: var(--text-lg); font-weight: var(--font-weight-semibold); }
+  .team-card__role { font-size: var(--text-sm); color: var(--color-primary); font-weight: var(--font-weight-medium); }
+  .team-card__bio  { font-size: var(--text-sm); color: var(--color-neutral-light); line-height: var(--line-height-normal); }
+  .team-card__link { font-size: var(--text-sm); margin-top: auto; }
+</style>

@@ -1,0 +1,72 @@
+---
+import Container from '@/components/ui/Container.astro';
+import SectionTitle from '@/components/ui/SectionTitle.astro';
+import Button from '@/components/ui/Button.astro';
+
+export interface WhyUsItem {
+  icon: string;
+  title: string;
+  description: string;
+}
+
+interface Props {
+  title?: string;
+  subtitle?: string;
+  items: WhyUsItem[];
+  ctaText?: string;
+  ctaHref?: string;
+}
+
+const {
+  title = '¿Por qué elegirnos?',
+  subtitle,
+  items,
+  ctaText,
+  ctaHref = '/contacto',
+} = Astro.props;
+---
+
+<section class="section section--white why-us">
+  <Container>
+    <SectionTitle {title} {subtitle} />
+    <ul class="why-us__grid" role="list">
+      {items.map(item => (
+        <li class="why-card">
+          <span class="why-card__icon" aria-hidden="true">{item.icon}</span>
+          <h3 class="why-card__title">{item.title}</h3>
+          <p class="why-card__desc">{item.description}</p>
+        </li>
+      ))}
+    </ul>
+    {ctaText && (
+      <div class="why-us__cta">
+        <Button href={ctaHref} size="lg">{ctaText}</Button>
+      </div>
+    )}
+  </Container>
+</section>
+
+<style>
+  .why-us__grid {
+    display: grid;
+    gap: var(--space-6);
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    margin-bottom: var(--space-10);
+  }
+
+  .why-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-6);
+    border-left: 3px solid var(--color-primary);
+    background: var(--color-bg);
+    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+  }
+
+  .why-card__icon { font-size: 2rem; line-height: 1; }
+  .why-card__title { font-size: var(--text-lg); font-weight: var(--font-weight-semibold); }
+  .why-card__desc { color: var(--color-neutral-light); line-height: var(--line-height-normal); font-size: var(--text-sm); }
+
+  .why-us__cta { text-align: center; }
+</style>

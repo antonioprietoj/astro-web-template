@@ -88,6 +88,21 @@ astro-web-template/
 
 ## Crear una web nueva para un cliente
 
+### Opción rápida: `new-client.sh`
+
+```bash
+bash new-client.sh web-cliente-nombre --sector=clinica
+```
+
+Clona la plantilla, renombra el proyecto DDEV, desvincula el remote y arranca el servidor.  
+Sectores disponibles: `reformas` · `clinica` · `abogados` · `restaurante` · `academia` · `consultor`
+
+Ver presets en `src/data/presets/` y su `README.md`.
+
+---
+
+### Opción manual
+
 ### 1. Clonar la plantilla
 
 ```bash
@@ -196,11 +211,27 @@ ddev npm run build
 Sube el contenido de `dist/` al hosting (FTP, rsync, panel de control…).
 
 ```bash
-# Ejemplo con rsync
+# Manual con rsync
 rsync -avz --delete dist/ usuario@servidor:/public_html/
 ```
 
 Para Netlify/Vercel, apunta el directorio de publicación a `dist/`.
+
+### Deploy automático (GitHub Actions)
+
+El workflow `.github/workflows/deploy.yml` hace build y despliega por SFTP al hacer push a `main`.
+
+Añade estos secrets en GitHub → Settings → Secrets del repositorio del cliente:
+
+| Secret | Ejemplo |
+|--------|---------|
+| `SFTP_HOST` | `ftp.cliente.com` |
+| `SFTP_USER` | `cliente` |
+| `SFTP_PASSWORD` | `••••••••` |
+| `SFTP_PORT` | `22` |
+| `SFTP_PATH` | `/public_html` |
+
+Para hosting con SSH, descomenta la sección `rsync` del workflow y usa `SFTP_KEY` (clave privada SSH).
 
 ---
 

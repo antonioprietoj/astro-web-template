@@ -1,0 +1,83 @@
+---
+import Container from '@/components/ui/Container.astro';
+import SectionTitle from '@/components/ui/SectionTitle.astro';
+
+export interface BeforeAfterItem {
+  before: string;
+  after: string;
+  alt: string;
+  label?: string;
+}
+
+interface Props {
+  title?: string;
+  subtitle?: string;
+  items: BeforeAfterItem[];
+}
+
+const {
+  title = 'Antes y después',
+  subtitle = 'El resultado habla por sí solo.',
+  items,
+} = Astro.props;
+---
+
+<section class="section section--alt before-after">
+  <Container>
+    <SectionTitle {title} {subtitle} />
+    <ul class="ba__list" role="list">
+      {items.map(item => (
+        <li class="ba__item">
+          {item.label && <p class="ba__label">{item.label}</p>}
+          <div class="ba__pair">
+            <figure class="ba__figure">
+              <img src={item.before} alt={`Antes — ${item.alt}`} class="ba__img" width="500" height="375" loading="lazy" />
+              <figcaption class="ba__caption ba__caption--before">Antes</figcaption>
+            </figure>
+            <figure class="ba__figure">
+              <img src={item.after} alt={`Después — ${item.alt}`} class="ba__img" width="500" height="375" loading="lazy" />
+              <figcaption class="ba__caption ba__caption--after">Después</figcaption>
+            </figure>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </Container>
+</section>
+
+<style>
+  .ba__list { display: flex; flex-direction: column; gap: var(--space-12); }
+
+  .ba__label {
+    font-size: var(--text-lg);
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: var(--space-4);
+    text-align: center;
+  }
+
+  .ba__pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+  }
+
+  @media (max-width: 599px) { .ba__pair { grid-template-columns: 1fr; } }
+
+  .ba__figure { margin: 0; position: relative; overflow: hidden; border-radius: var(--radius-xl); box-shadow: var(--shadow-md); }
+  .ba__img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; }
+
+  .ba__caption {
+    position: absolute;
+    top: var(--space-3);
+    left: var(--space-3);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    font-size: var(--text-xs);
+    font-weight: var(--font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .ba__caption--before { background: #374151; color: #fff; }
+  .ba__caption--after  { background: var(--color-primary); color: #fff; }
+</style>

@@ -1,0 +1,92 @@
+---
+// Barra de confianza: logos, certificaciones, estadísticas o badges.
+
+export interface TrustItem {
+  label: string;
+  image?: string;   // logo path
+  icon?: string;    // emoji fallback
+  url?: string;
+}
+
+interface Props {
+  items: TrustItem[];
+  title?: string;
+}
+
+const { items, title } = Astro.props;
+---
+
+<section class="trust-bar" aria-label={title ?? 'Avales y certificaciones'}>
+  {title && <p class="trust-bar__title">{title}</p>}
+  <ul class="trust-bar__list" role="list">
+    {items.map(item => (
+      <li class="trust-bar__item">
+        {item.url
+          ? <a href={item.url} target="_blank" rel="noopener noreferrer" class="trust-bar__link">
+              {item.image
+                ? <img src={item.image} alt={item.label} class="trust-bar__logo" width="120" height="48" loading="lazy" />
+                : <span class="trust-bar__badge">{item.icon ?? ''} {item.label}</span>
+              }
+            </a>
+          : item.image
+            ? <img src={item.image} alt={item.label} class="trust-bar__logo" width="120" height="48" loading="lazy" />
+            : <span class="trust-bar__badge">{item.icon ?? ''} {item.label}</span>
+        }
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .trust-bar {
+    padding-block: var(--space-8);
+    background: var(--color-surface);
+    border-block: 1px solid var(--color-border);
+    text-align: center;
+  }
+
+  .trust-bar__title {
+    font-size: var(--text-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-neutral-light);
+    margin-bottom: var(--space-6);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .trust-bar__list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-8);
+  }
+
+  .trust-bar__logo {
+    max-height: 3rem;
+    width: auto;
+    opacity: 0.7;
+    filter: grayscale(1);
+    transition: opacity var(--transition-fast), filter var(--transition-fast);
+  }
+
+  .trust-bar__logo:hover, .trust-bar__link:hover .trust-bar__logo {
+    opacity: 1;
+    filter: grayscale(0);
+  }
+
+  .trust-bar__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-neutral);
+  }
+
+  .trust-bar__link { text-decoration: none; }
+</style>
